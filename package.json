@@ -1,6 +1,6 @@
 {
   "name": "node-express-server",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Simple node server with express",
   "main": "dist/index.js",
   "scripts": {
@@ -26,16 +26,25 @@
   },
   "homepage": "https://github.com/andryuha49/node-express-server#readme",
   "devDependencies": {
+    "@types/cors": "^2.8.4",
+    "@types/errorhandler": "0.0.32",
     "@types/express": "^4.16.1",
+    "@types/express-fileupload": "^0.4.0",
     "@types/i18n": "^0.8.5",
+    "@types/morgan": "^1.7.35",
+    "@types/swagger-ui-dist": "^3.0.0",
     "typescript": "^3.3.3"
   },
   "dependencies": {
-    "@types/swagger-ui-dist": "^3.0.0",
+    "body-parser": "^1.18.3",
     "class-validator": "^0.9.1",
     "class-validator-jsonschema": "^1.2.0",
+    "cors": "^2.8.5",
+    "errorhandler": "^1.5.0",
     "express": "^4.16.4",
+    "express-fileupload": "^1.1.1-alpha.3",
     "i18n": "^0.8.3",
+    "morgan": "^1.9.1",
     "routing-controllers": "^0.7.7",
     "routing-controllers-openapi": "^1.6.0",
     "swagger-ui-dist": "^3.20.8"
