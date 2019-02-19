@@ -2,18 +2,39 @@ import express from 'express';
 import {useExpressServer} from 'routing-controllers';
 import {useSwagger} from './useSwagger';
 import {useI18n} from './useI18n';
+import errorHandler from 'errorhandler';
+import cors from 'cors';
+import morgan from 'morgan';
+import bodyParser from 'body-parser';
+import fileUpload from 'express-fileupload';
 
 const server: any = express();
 
-const defaultSwaggerPatch = '/api/swagger-ui';
-const defaultSwaggerJsonPatch = '/api/v1/swagger.json';
-// server.useSwagger = () => {
-//   return useSwagger(server, defaultSwaggerPatch, defaultSwaggerJsonPatch);
-// };
+/**
+ * Error Handler. Provides full stack - remove for production
+ */
+if (server.get('env') !== 'production') {
+  server.use(errorHandler());
+  server.use(morgan('dev')) // :method :url :status :response-time ms - :res[content-length]
+}
+
+server.useBodyParser = (options: any = null) => {
+  server.use(bodyParser.json(options)) // Parse application/json
+    .use(bodyParser.raw(options)) // Parse application/x-www-form-urlencoded
+    .use(bodyParser.urlencoded(options));
+};
+
+server.fileUpload = (options: any = null) => {
+  server.use(fileUpload(options));
+};
+
+server.useCors = (corsOptions: any = null) => {
+  server.use(cors(corsOptions));
+};
 
 server.useSwagger = (swaggerPatch: string = '/api/swagger-ui', swaggerJsonPatch: string = '/api/v1/swagger.json') => {
-  swaggerPatch = swaggerPatch || defaultSwaggerPatch;
-  swaggerJsonPatch = swaggerJsonPatch || defaultSwaggerJsonPatch;
+  swaggerPatch = swaggerPatch || '/api/swagger-ui';
+  swaggerJsonPatch = swaggerJsonPatch || '/api/v1/swagger.json';
   return useSwagger(server, swaggerPatch, swaggerJsonPatch);
 };
 
