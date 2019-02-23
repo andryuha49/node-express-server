@@ -23,7 +23,7 @@ server.useCors({origin: '*'});
 server.useBodyParser({limit: '50mb'});
 
 // Use file upload
-server.fileUpload();
+server.useFileUpload();
 
 // Use routing-controllers
 server.useApi([UsersController]);
