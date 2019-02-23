@@ -24,7 +24,7 @@ server.useBodyParser = (options: any = null) => {
     .use(bodyParser.urlencoded(options));
 };
 
-server.fileUpload = (options: any = null) => {
+server.useFileUpload = (options: any = null) => {
   server.use(fileUpload(options));
 };
 
