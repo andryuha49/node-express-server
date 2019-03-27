@@ -4,29 +4,29 @@ Simple node server with express
 
 ## Examples
 ```typescript
-import {server} from 'node-express-server';
+import {Server} from 'node-express-server';
 import {UsersController} from './controllers/usersController';
+import {AuthArea} from './areas/authArea';
 
-// Use i18n
-server.useI18n({directory: __dirname + '/assets/i18n'});
+const server = new Server();
+server
+  // Use i18n
+  .useI18n({directory: __dirname + '/assets/i18n'})
+  // Use swagger
+  .useSwagger('/api/swagger-ui')
+  // Use static
+  .useStatic(__dirname + '/../clint')
+  // Use cors
+  .useCors({origin: '*'})
+  // Use body parser
+  .useBodyParser({limit: '50mb'})
+  // Use file upload
+  .useFileUpload()
+  // Use routing-controllers
+  .useApi({controllers: [UsersController]})
+  // Register areas (IAreaRegistration)
+  .registerAreas([AuthArea]);
 
-// Use swagger
-server.useSwagger('/api/swagger-ui');
-
-// Use static
-server.useStatic(__dirname + '/../clint');
-
-// Use cors
-server.useCors({origin: '*'});
-
-// Use body parser
-server.useBodyParser({limit: '50mb'});
-
-// Use file upload
-server.useFileUpload();
-
-// Use routing-controllers
-server.useApi([UsersController]);
-
-server.start(3001);
+  server.start(3001).then();
 ```
+
