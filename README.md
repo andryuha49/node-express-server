@@ -5,8 +5,8 @@ Simple node server with express
 ## Examples
 ```typescript
 import {Server} from 'node-express-server';
-import {UsersController} from './controllers/usersController';
-import {AuthArea} from './areas/authArea';
+import {ProductsController} from './controllers/productsController';
+import {authAreaRegistration} from './areas/auth/authAreaRegistration';
 
 const server = new Server();
 server
@@ -23,10 +23,53 @@ server
   // Use file upload
   .useFileUpload()
   // Use routing-controllers
-  .useApi({controllers: [UsersController]})
+  .useApi({controllers: [ProductsController]})
   // Register areas (IAreaRegistration)
-  .registerAreas([AuthArea]);
+  .registerAreas([authAreaRegistration]);
 
   server.start(3001).then();
 ```
+If you use 'typeorm' you can register db config using command:
+```typescript
+ server.addEntities([...]); // Add typeorm entities
+ server.addMigrations([...]); // Add typeorm migrations
+ // The input object is ConnectionOptions from typeorm
+ server.registerDb({...});
+```
+### What is area?
+The area is a simple module which has own controllers and another code.
+For example
+```typescript
+import {IServer, IAreaRegistration} from 'node-express-server';
 
+export class AuthAreaRegistration implements IAreaRegistration {
+  areaName: string = 'auth';
+
+  registerArea(server: IServer) {
+    server.addControllers([...]); // Add controllers
+    server.addEntities([...]); // Add typeorm entities
+    server.addMigrations([...]); // Add typeorm migrations
+    ...
+  }
+}
+```
+Example code structure
+```
+src
+  areas
+    auth
+      controllers
+        -usersController.ts
+      entities
+        -userEntity.ts
+      repositories
+        -usersRepository.ts
+      -authAreaRegistration.ts
+    ... // Enother areas
+  controllers
+    -productsController.ts
+  entities
+    -productEntity.ts
+  helpers
+  -index.ts
+```
