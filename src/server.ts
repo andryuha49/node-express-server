@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import {RoutingControllersOptions, useExpressServer} from 'routing-controllers';
-import {MigrationInterface} from 'typeorm';
+import {ConnectionOptions, MigrationInterface} from 'typeorm';
 import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser';
 import errorHandler from 'errorhandler';
@@ -58,7 +58,7 @@ export class Server implements IServer {
     this.migrations.push(...migrations);
   }
 
-  registerDb(dbConfig: any) {
+  registerDb(dbConfig: ConnectionOptions) {
     this.dbConfig = dbConfig;
     return this;
   }
