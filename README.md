@@ -24,6 +24,8 @@ server
   .useFileUpload()
   // Use routing-controllers
   .useApi({controllers: [ProductsController]})
+  // Use custom express middleware
+  .use(...)
   // Register areas (IAreaRegistration)
   .registerAreas([authAreaRegistration]);
 

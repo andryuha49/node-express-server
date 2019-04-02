@@ -104,6 +104,12 @@ export class Server implements IServer {
 
   useApi(apiOptions: RoutingControllersOptions) {
     this.apiOptions = apiOptions;
+    return this;
+  }
+
+  use(middleware: any) {
+    this.server.use(middleware);
+    return this;
   }
 
   async start(port: number, nameOrOptions: string | any, options: any = {}) {
