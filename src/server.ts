@@ -1,11 +1,12 @@
 import express from 'express';
 import cors from 'cors';
-import {RoutingControllersOptions, useExpressServer} from 'routing-controllers';
-import {ConnectionOptions, MigrationInterface} from 'typeorm';
 import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser';
 import errorHandler from 'errorhandler';
 import morgan from 'morgan';
+import {RoutingControllersOptions, useExpressServer} from 'routing-controllers';
+import {ConnectionOptions, MigrationInterface} from 'typeorm';
+import {OpenAPIObject} from 'openapi3-ts'
 
 import {IServer} from './interfaces/IServer';
 import {createConnection} from './data-base';
@@ -79,10 +80,17 @@ export class Server implements IServer {
     return this;
   }
 
-  useSwagger(swaggerPatch: string = '/api/swagger-ui', swaggerJsonPath: string = '/api/v1/swagger.json') {
+  useSwagger(
+    swaggerPatch: string = '/api/swagger-ui',
+    swaggerJsonPathOrOptions: string | OpenAPIObject | any = '/api/v1/swagger.json',
+    options: OpenAPIObject | any = {}
+  ) {
     swaggerPatch = swaggerPatch || '/api/swagger-ui';
-    swaggerJsonPath = swaggerJsonPath || '/api/v1/swagger.json';
-    useSwagger(this.server, swaggerPatch, swaggerJsonPath);
+    if (typeof swaggerJsonPathOrOptions === 'object') {
+      options = swaggerJsonPathOrOptions;
+      swaggerJsonPathOrOptions = '/api/v1/swagger.json';
+    }
+    useSwagger(this.server, swaggerPatch, swaggerJsonPathOrOptions, options);
     return this;
   };
 
