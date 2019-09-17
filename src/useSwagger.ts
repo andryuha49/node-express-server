@@ -5,8 +5,14 @@ import { getMetadataArgsStorage} from 'routing-controllers';
 import {routingControllersToSpec} from 'routing-controllers-openapi';
 import { getFromContainer, MetadataStorage } from 'class-validator';
 import {validationMetadatasToSchemas} from 'class-validator-jsonschema';
+import {OpenAPIObject} from 'openapi3-ts'
 
-export const useSwagger = (server: any, swaggerPatch: string, swaggerJsonPatch: string) => {
+export const useSwagger = (
+  server: any,
+  swaggerPatch: string,
+  swaggerJsonPatch: string,
+  options: OpenAPIObject | any = {}
+) => {
   const pathToSwaggerUi = swaggerUiDist.absolutePath();
   const indexContent = fs.readFileSync(`${pathToSwaggerUi}/index.html`)
     .toString()
@@ -50,7 +56,7 @@ export const useSwagger = (server: any, swaggerPatch: string, swaggerJsonPatch: 
   // serve swagger
   server.use(swaggerJsonPatch, (req: any, res: any) => {
     res.setHeader('Content-Type', 'application/json');
-    res.send(swaggerSpec);
+    res.send({...swaggerSpec, ...options});
   });
   return server;
 };
