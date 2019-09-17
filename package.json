@@ -1,6 +1,6 @@
 {
   "name": "node-express-server",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Simple node server with express",
   "main": "dist/index.js",
   "files": [

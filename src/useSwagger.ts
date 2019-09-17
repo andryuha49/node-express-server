@@ -10,7 +10,7 @@ export const useSwagger = (server: any, swaggerPatch: string, swaggerJsonPatch: 
   const pathToSwaggerUi = swaggerUiDist.absolutePath();
   const indexContent = fs.readFileSync(`${pathToSwaggerUi}/index.html`)
     .toString()
-    .replace("https://petstore.swagger.io/v2/swagger.json", swaggerJsonPatch);
+    .replace('https://petstore.swagger.io/v2/swagger.json', swaggerJsonPatch);
   // you need to do this since the line below serves `index.html` at both routes
   server.get(`${swaggerPatch}/index.html`, (req: any, res: any) => res.send(indexContent));
   server.get(swaggerPatch, (req: any, res: any) => res.send(indexContent));
@@ -21,14 +21,15 @@ export const useSwagger = (server: any, swaggerPatch: string, swaggerJsonPatch: 
   const storage = getMetadataArgsStorage();
   const swaggerSpec = routingControllersToSpec(storage);
   // Parse class-validator classes into JSON Schema:
-  const metadatas = (getFromContainer(MetadataStorage) as any).validationMetadatas;
-  const schemas = validationMetadatasToSchemas(metadatas, {
+  const metadata = (getFromContainer(MetadataStorage) as any).validationMetadatas;
+  const schemas = validationMetadatasToSchemas(metadata, {
     refPointerPrefix: '#/components/schemas/'
   });
 
   swaggerSpec.security = [{
-    "bearerAuth": []}
-  ];
+    'bearerAuth': []
+  }];
+
   swaggerSpec.components = swaggerSpec.components || {};
   swaggerSpec.components.schemas = schemas;
   swaggerSpec.components.securitySchemes = {
@@ -36,8 +37,8 @@ export const useSwagger = (server: any, swaggerPatch: string, swaggerJsonPatch: 
       type: 'apiKey',
       scheme: 'bearer',
       bearerFormat: 'JWT',
-      name: "Authorization",
-      in: "header"
+      name: 'Authorization',
+      in: 'header'
     }
   };
   swaggerSpec.info = {

@@ -34,13 +34,14 @@ function registerAllAreas(server: IServer, areas: IConstructable<IAreaRegistrati
 }
 
 export class Server implements IServer {
+  private readonly server: any = null;
+
   private controllers?: any[] = [];
   private entities: any[] = [];
   private migrations: MigrationInterface[] = [];
   private areas: IConstructable<IAreaRegistration>[] = [];
-  private server: any = null;
   private dbConfig: any = null;
-  private apiOptions: RoutingControllersOptions = {};
+  private apiOptions: RoutingControllersOptions = undefined;
 
   constructor(existingExpressServer?: any) {
     this.server = existingExpressServer || express();
@@ -128,14 +129,12 @@ export class Server implements IServer {
     if (this.dbConfig !== null) {
       await createConnection(this.entities, this.migrations, this.dbConfig);
     }
-    if (this.controllers.length > 0) {
-      if (this.apiOptions && this.apiOptions.controllers) {
-        this.apiOptions.controllers.push(...this.controllers);
-      }
-      useExpressServer(server, { // register created express server in routing-controllers
-        controllers: this.controllers, // and configure it the way you need (controllers, validation, etc.)
-        ...this.apiOptions
-      });
+    if (this.apiOptions !== undefined) {
+      this.apiOptions.controllers = this.apiOptions.controllers || [];
+      this.apiOptions.controllers.push(...this.controllers);
+
+      // register created express server in routing-controllers
+      useExpressServer(server, this.apiOptions);
     }
     return new Promise((resolve, reject) => {
       try {
